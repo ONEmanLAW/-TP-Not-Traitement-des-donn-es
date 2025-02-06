@@ -1,0 +1,12 @@
+
+node_modules/
+
+
+*.csv
+
+
+*.log
+
+.vscode/
+
+package-lock.json
