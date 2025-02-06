@@ -1,37 +1,33 @@
 import requests
-from bs4 import BeautifulSoup
-import csv
+import psycopg2
 
 
-URL = "https://www.ign.com/wikis/elden-ring/Weapons"
+CLIENT_ID = '6vnwxwyuvhokk2caqxbm6x9rihglat'
+CLIENT_SECRET = 'yqfqfh9ri2bxmo8nzj0hcsnvgk08p6'
 
 
-headers = {"User-Agent": "Mozilla/5.0"}
-response = requests.get(URL, headers=headers)
+def get_access_token(client_id, client_secret):
+    url = 'https://id.twitch.tv/oauth2/token'
+    params = {
+        'client_id': client_id,
+        'client_secret': client_secret,
+        'grant_type': 'client_credentials'
+    }
+    response = requests.post(url, params=params)
+    return response.json()['access_token']
 
+access_token = get_access_token(CLIENT_ID, CLIENT_SECRET)
 
-if response.status_code == 200:
-    soup = BeautifulSoup(response.text, "html.parser")
+def get_game_data(game_name):
+    url = 'https://api.igdb.com/v4/games'
+    headers = {
+        'Client-ID': CLIENT_ID,
+        'Authorization': f'Bearer {access_token}',
+        'Content-Type': 'application/json'
+    }
+    query = f'fields name,genres,platforms,summary; search "{game_name}";'
+    response = requests.post(url, headers=headers, data=query)
+    return response.json()
 
-
-    weapon_sections = soup.find_all("li", class_="wiki-list-item") 
-
-    weapons = []
-
-
-    for weapon in weapon_sections:
-        name = weapon.find("a").text.strip() if weapon.find("a") else "Nom inconnu"
-        link = weapon.find("a")["href"] if weapon.find("a") else "Aucun lien"
-        
-        weapons.append({"Nom": name, "Lien": link})
-
-  
-    with open("armes_ign.csv", "w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=["Nom", "Lien"])
-        writer.writeheader()
-        writer.writerows(weapons)
-
-    print("Scraping terminé ! Les données sont dans 'armes_ign.csv'.")
-
-else:
-    print(f"Erreur {response.status_code} lors de l'accès à la page.")
+game_data = get_game_data("The Witcher 3")
+print(game_data)
