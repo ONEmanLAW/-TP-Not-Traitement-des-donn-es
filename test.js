@@ -27,7 +27,7 @@ async function getGameRating() {
       fs.writeFileSync('testRating.csv', csvData, 'utf-8');
       console.log('Fichier CSV créé avec succès');
     } else {
-      console.log('Impossible de récupérer la note.');
+      console.log('Impossible la note.');
     }
 
   } catch (error) {

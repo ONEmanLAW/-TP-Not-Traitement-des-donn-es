@@ -72,7 +72,7 @@ def save_to_csv(games):
             
             writer.writerow([name, summary, release_date, genres, platforms])
 
-    print("✅ Fichier 'games.csv' enregistré avec succès !")
+    print(" Fichier 'games.csv' enregistré avec succès !")
 
 
 games_data = get_games()
