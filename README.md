@@ -10,6 +10,9 @@ Le script `main.py` est utilisé pour récupérer des informations de base sur 2
 
 #### Comment l'utiliser :
 1. Ouvre un terminal dans le dossier du projet.
+```bash
+   pip install requests python-dotenv
+````
 2. Exécute la commande suivante pour lancer le script Python et récupérer les informations des jeux :
 
    ```bash
